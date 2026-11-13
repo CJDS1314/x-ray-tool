@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#081426">
+<title>X-Ray｜X 账号检测工具</title>
+<style>
+:root{color-scheme:dark;--bg:#07111f;--panel:#101f33;--panel2:#142740;--line:#263c58;--text:#eaf2ff;--muted:#9db0c9;--blue:#4da3ff;--cyan:#48d7e8;--green:#47d7a0;--orange:#ffbd66}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#17345a 0,transparent 38%),var(--bg);color:var(--text);font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:900px;margin:auto;padding:24px 16px 60px}.hero{padding:25px 22px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(130deg,#142c49,#0c192b 70%);margin-bottom:18px}
+.logo{display:flex;align-items:center;gap:12px}.mark{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#061426;font-weight:900;font-size:21px;box-shadow:0 8px 30px #248de855}
+h1{font-size:25px;margin:0;letter-spacing:.3px}.sub{color:var(--muted);margin:7px 0 0}.tag{display:inline-block;color:#a9dcff;border:1px solid #31577d;background:#102b47;padding:3px 9px;border-radius:99px;font-size:12px;margin-top:14px}
+.tabs{display:flex;gap:8px;overflow:auto;margin:18px 0}.tab{white-space:nowrap;border:1px solid var(--line);background:#0c1a2b;color:var(--muted);padding:10px 15px;border-radius:12px;cursor:pointer}.tab.active{background:#16385d;border-color:#438bd0;color:white}
+.panel{background:linear-gradient(145deg,#12243a,#0d1a2b);border:1px solid var(--line);border-radius:18px;padding:20px;margin:14px 0}
+h2{font-size:19px;margin:0 0 8px}h3{font-size:15px;margin:18px 0 8px}.muted{color:var(--muted)}.small{font-size:13px;color:var(--muted)}
+input[type=text],input[type=file]{width:100%;background:#081627;color:var(--text);border:1px solid #304966;border-radius:11px;padding:12px;font:inherit}
+button,.btn{border:0;border-radius:11px;padding:11px 15px;background:linear-gradient(110deg,#368cf0,#35c6dc);color:#041426;font-weight:750;cursor:pointer;text-decoration:none;display:inline-block}
+button.secondary,.btn.secondary{background:#1a304b;color:#dcecff;border:1px solid #35516f}
+button:disabled{opacity:.45;cursor:not-allowed}.field{margin:14px 0}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.check{padding:12px;border:1px solid var(--line);border-radius:12px;background:#0a192a}.check label{display:flex;gap:9px;align-items:flex-start;cursor:pointer}
+.result{margin-top:14px;padding:14px;border-radius:12px;background:#0a1a2b;border:1px solid var(--line)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.stat{background:#0a192a;border:1px solid var(--line);border-radius:13px;padding:13px}.stat b{display:block;font-size:23px;color:#8dcaff}
+.list{max-height:320px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:10px}.person{padding:9px 12px;border-bottom:1px solid #20344c;overflow-wrap:anywhere}.person:last-child{border:0}
+.notice{border-left:3px solid var(--orange);padding:10px 12px;background:#2a241b;color:#f7d9ad;border-radius:7px;font-size:13px;margin-top:14px}
+.hidden{display:none!important}.footer{text-align:center;color:#7187a4;font-size:12px;margin-top:25px}
+@media(max-width:600px){.wrap{padding:14px 12px 40px}.hero{padding:20px 16px}h1{font-size:22px}.panel{padding:16px}.checks{grid-template-columns:1fr}.stats{gap:7px}.stat{padding:10px}.stat b{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+ <div class="logo"><div class="mark">X</div><div><h1>X-Ray <span style="color:#69cfff">｜</span> X 账号检测工具</h1><div class="sub">公开信号自查 · 互关关系分析 · 本地处理</div></div></div>
+ <span class="tag">免费使用 · 无需登录 · 不上传数据</span>
+</header>
+<nav class="tabs">
+ <button class="tab active" data-tab="visibility">账号可见性自查</button>
+ <button class="tab" data-tab="friends">互关关系分析</button>
+ <button class="tab" data-tab="about">使用说明</button>
+</nav>
+<section id="visibility" class="panel">
+ <h2>账号可见性自查</h2>
+ <p class="muted">输入 X 用户名，快速打开公开页面与搜索入口，再根据实际观察勾选检查结果。</p>
+ <div class="field"><label for="handle">X 用户名（不需要 @）</label><input id="handle" type="text" placeholder="例如：elonmusk" autocomplete="off"></div>
+ <div class="actions"><button id="openProfile">打开个人主页</button><button id="openSearch" class="secondary">搜索该账号</button></div>
+ <h3>检查项目</h3>
+ <div class="checks">
+  <div class="check"><label><input type="checkbox" class="signal" value="search"> 在 X 搜索用户名，能正常找到账号</label></div>
+  <div class="check"><label><input type="checkbox" class="signal" value="profile"> 个人主页和公开内容能正常打开</label></div>
+  <div class="check"><label><input type="checkbox" class="signal" value="reply"> 用未关注该账号的视角，回复/互动内容可见</label></div>
+  <div class="check"><label><input type="checkbox" class="signal" value="warning"> 页面没有出现账号受限或内容隐藏提示</label></div>
+ </div>
+ <div class="actions"><button id="judge">生成自查结果</button><button id="resetCheck" class="secondary">清空勾选</button></div>
+ <div id="judgeResult" class="result hidden" aria-live="polite"></div>
+ <div class="notice">重要说明：X 没有向公众提供一个能准确判定“影子封禁”的官方检测接口。本工具只整理你手动观察到的公开信号，不能保证判断账号是否被限流，也不代表 X 官方结论。</div>
+</section>
+<section id="friends" class="panel hidden">
+ <h2>互关关系分析</h2>
+ <p class="muted">导入 X 导出的 Following（你关注的人）和 Followers（关注你的人）CSV，在手机或电脑浏览器本地计算。</p>
+ <div class="field"><label for="following">① Following.csv（你关注的人）</label><input id="following" type="file" accept=".csv,text/csv"></div>
+ <div class="field"><label for="followers">② Followers.csv（关注你的人）</label><input id="followers" type="file" accept=".csv,text/csv"></div>
+ <div class="actions"><button id="analyze">开始分析</button><button id="sample" class="secondary">下载 CSV 示例模板</button></div>
+ <div id="friendResult" class="hidden">
+  <div class="stats"><div class="stat"><span class="small">你关注的人</span><b id="nFollowing">0</b></div><div class="stat"><span class="small">关注你的人</span><b id="nFollowers">0</b></div><div class="stat"><span class="small">互相关注</span><b id="nMutual">0</b></div></div>
+  <h3>未回关名单 <span class="small" id="nNotBack"></span></h3>
+  <input id="filter" type="text" placeholder="搜索用户名…">
+  <div class="list" id="notBackList"></div>
+  <div class="actions"><button id="export">导出未回关名单 CSV</button></div>
+  <h3>互相关注名单</h3><div class="list" id="mutualList"></div>
+ </div>
+ <div class="notice">CSV 文件只在当前浏览器内读取和计算，不会上传到服务器。请使用 X 官方下载的数据文件；不同版本导出字段可能略有差异。</div>
+</section>
+<section id="about" class="panel hidden">
+ <h2>使用说明与边界</h2>
+ <h3>账号可见性自查</h3><p class="muted">工具会打开 X 的公开主页和搜索页，具体是否可见需要你自己观察。搜索结果可能受登录状态、地区、内容设置和 X 搜索机制影响。</p>
+ <h3>互关关系分析</h3><p class="muted">在 X 设置中申请下载账号数据，解压后找到 followers.csv 与 following.csv（文件夹结构可能随导出版本变化），再分别导入。</p>
+ <h3>隐私与安全</h3><p class="muted">本网页不要求 X 密码、验证码、API Key 或登录授权；不自动关注、取关、发帖或评论。导入的数据仅用于当前页面内的本地计算。</p>
+ <h3>后续可扩展方向</h3><p class="muted">后续可考虑增加互动记录整理、评论活跃度统计和粉丝增长趋势分析。涉及 X 账号实时数据的功能，需以平台开放权限和免费可用的数据来源为前提。</p>
+</section>
+<div class="footer">X-Ray · 独立辅助工具，非 X 官方产品</div>
+</div>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+$$('.tab').forEach(b=>b.addEventListener('click',()=>{$$('.tab').forEach(x=>x.classList.toggle('active',x===b));['visibility','friends','about'].forEach(id=>$('#'+id).classList.toggle('hidden',id!==b.dataset.tab));}));
+function username(){return $('#handle').value.trim().replace(/^@/,'').replace(/[^a-zA-Z0-9_]/g,'')}
+$('#openProfile').onclick=()=>{let u=username();if(!u)return alert('请先输入 X 用户名');window.open('https://x.com/'+encodeURIComponent(u),'_blank','noopener')};
+$('#openSearch').onclick=()=>{let u=username();if(!u)return alert('请先输入 X 用户名');window.open('https://x.com/search?q='+encodeURIComponent(u)+'&src=typed_query','_blank','noopener')};
+$('#judge').onclick=()=>{let checks=$$('.signal'),n=checks.filter(x=>x.checked).length,box=$('#judgeResult');box.classList.remove('hidden');if(n===4)box.innerHTML='<b style="color:#47d7a0">暂未发现明显异常</b><br>你勾选的公开信号均正常，但这不等于账号一定没有受到分发限制。';else if(n>=2)box.innerHTML='<b style="color:#ffbd66">存在部分可见性异常或待核实项</b><br>建议换一个未登录/未关注该账号的视角复查，并隔一段时间再次检查。';else box.innerHTML='<b style="color:#ffbd66">证据不足，暂时无法判断</b><br>目前正常信号较少，建议先逐项打开主页和搜索入口检查。';};
+$('#resetCheck').onclick=()=>{$$('.signal').forEach(x=>x.checked=false);$('#judgeResult').classList.add('hidden')};
+function parseCSV(text){let rows=[],row=[],cell='',q=false;for(let i=0;i<text.length;i++){let c=text[i];if(c==='"'&&q&&text[i+1]==='"'){cell+='"';i++}else if(c==='"'){q=!q}else if(c===','&&!q){row.push(cell);cell=''}else if((c==='\n'||c==='\r')&&!q){if(c==='\r'&&text[i+1]==='\n')i++;row.push(cell);if(row.some(v=>v.trim()))rows.push(row);row=[];cell=''}else cell+=c}row.push(cell);if(row.some(v=>v.trim()))rows.push(row);return rows}
+function extract(file){return new Promise((resolve,reject)=>{if(!file)return reject(new Error('请先选择两个 CSV 文件'));let r=new FileReader();r.onload=()=>{try{let rows=parseCSV(r.result),head=rows.shift()||[],idx=head.findIndex(x=>/^(username|screen_name|handle|account|用户名|账号|用户)$/i.test(x.trim()));if(idx<0)idx=head.findIndex(x=>/username|screen_name|handle|account|用户名|账号|用户/i.test(x));if(idx<0)idx=0;let names=rows.map(r=>(r[idx]||'').trim().replace(/^@/,'')).filter(x=>x&&!/^https?:/i.test(x));resolve([...new Set(names.map(x=>x.toLowerCase()))])}catch(e){reject(e)}};r.onerror=reject;r.readAsText(file)})}
+let notBack=[],mutual=[];
+$('#analyze').onclick=async()=>{try{let [a,b]=await Promise.all([extract($('#following').files[0]),extract($('#followers').files[0])]);let followers=new Set(b);notBack=a.filter(x=>!followers.has(x));mutual=a.filter(x=>followers.has(x));$('#nFollowing').textContent=a.length;$('#nFollowers').textContent=b.length;$('#nMutual').textContent=mutual.length;$('#nNotBack').textContent='（'+notBack.length+' 人）';$('#friendResult').classList.remove('hidden');renderLists()}catch(e){alert(e.message||'读取文件失败，请确认 CSV 格式')}}; 
+function renderLists(){let f=$('#filter').value.trim().toLowerCase(),arr=notBack.filter(x=>x.includes(f));$('#notBackList').innerHTML=arr.length?arr.map(x=>'<div class="person">@'+escapeHTML(x)+'</div>').join(''):'<div class="person muted">没有匹配结果</div>';$('#mutualList').innerHTML=mutual.length?mutual.map(x=>'<div class="person">@'+escapeHTML(x)+'</div>').join(''):'<div class="person muted">暂无互关账号</div>'}
+function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+$('#filter').oninput=renderLists;
+$('#export').onclick=()=>{let csv='username\\n'+notBack.map(x=>'"'+x.replace(/"/g,'""')+'"').join('\\n'),blob=new Blob(['\\ufeff'+csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='x-ray-not-following-back.csv';a.click();URL.revokeObjectURL(a.href)};
+$('#sample').onclick=()=>{let blob=new Blob(['username\\nexample_user_1\\nexample_user_2\\n'],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='x-ray-csv-template.csv';a.click();URL.revokeObjectURL(a.href)};
+</script>
+</body>
+</html>
